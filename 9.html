@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>9.html</title>
+</head>
+<body>
+    <h1>9.html</h1>
+
+    <p id="hello"></p>
+
+    <input id="input" type="text" /><button id="button">DO IT</button>
+    <ul id="target"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io.connect('/');
+
+        socket.on('connect', function() {
+            console.log('connected');
+        });
+
+        socket.on('disconnect', function() {
+            console.log('disconnected');
+        });
+
+        socket.on('hello', function(msg) {
+            document.getElementById('hello').innerHTML = 'Hello World! ' + msg;
+        });
+
+        document.getElementById('button').addEventListener('click', function() {
+            var input = document.getElementById('input');
+            var msg = input.value;
+            if(msg) {
+                socket.emit('marco', msg);
+                document.getElementById('target').innerHTML += '<li>' + msg + '</li>';
+                input.value = '';
+            }
+        });
+
+        socket.on('polo', function(msg) {
+            var li = document.createElement('li');
+            li.innerHTML = msg;
+            document.getElementById('target').appendChild(li, null);
+        });
+    </script>
+</body>
+</html>
